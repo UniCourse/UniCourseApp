@@ -15,7 +15,7 @@ public class MainActivity extends DroidGap {
 		//setContentView(R.layout.activity_main);
 		//super.setIntegerProperty("splashscreen", R.drawable.splash);
 		//super.loadUrl("file:///android_asset/www/landing_android.html", 1000);
-		super.loadUrl("file:///android_asset/www/test.html", 100);
+		super.loadUrl("file:///android_asset/www/loading_app.html", 100);
 	}
 
 	@Override

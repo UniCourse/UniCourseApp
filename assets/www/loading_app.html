@@ -1,0 +1,47 @@
+<html>
+<head>
+	<!-- script type="text/javascript" src="./js/cordova.js"></script-->
+	<script type="text/javascript" src="./js/constants.js"></script>
+	<script type="text/javascript" src="./js/jquery.js"></script>
+</head>
+<body>
+	<button id='btn-delete'>Delete</button>
+	<button id='btn-go'>Go Home</button>
+	<h1>Loading...</h1>
+	<br/>
+	<h2>usernumber : </h2><h2 id="un"></h2>
+	<br/>
+	<h2>password   : </h2><h2 id="pw"></h2>
+	<script>
+		// 本页面实现了读取本地用户名密码参数  存在的话自动登陆  否则转到登陆页面
+		var usernumber = window.localStorage.getItem("usernumber");
+		var password = window.localStorage.getItem("password");
+		if (usernumber == null || password == null) {
+			//$('#un').text("null");
+			location.href="landing_android.html";
+			//$('#pw').text("null");
+		}
+		else {
+			$.post(APP_PATH + 'Login/login',
+					{'usernumber':usernumber, 'password':password},
+					function (data) {
+						if (data.success == 1) {
+							$('#un').text("success");
+						}
+				}, 'json');
+		}
+		
+		
+		// 删除本地存储
+		$(document).ready(function() {			
+			$("#btn-delete").click(function () {
+				window.localStorage.removeItem("usernumber");
+				window.localStorage.removeItem("password");
+			});
+			$("#btn-go").click(function () {
+				location.href="news.html";
+			});
+		});
+	</script>
+</body>
+</html>

@@ -21,6 +21,8 @@
 			#section4 .button-div button img{display: inline-block;position: relative;top: 3px;left: -5px;width: 20px;height: 20px;}
 
 		</style>
+		<script type="text/javascript" src = "./js/jquery.js"></script>
+		<script type="text/javascript" src = "./js/constants.js"></script>
 	</head>
 	<body>
 	<div class="outcontainer">
@@ -34,24 +36,24 @@
 			<div id="section3">
 				让教学变得简单有趣
 			</div>
-			<div id="section4">
-				<form>
-					<div class="input-div">
-						<span class="input-append"><img src="img/user.png"/></span>
-						<input placeholder="学工号"/>
-					</div>
-					<div class="input-div">
-						<span class="input-append"><img src="img/pwd.png"/></span>
-						<input  placeholder="密码"/>
-					</div>
-					<div class="button-div">
-						<button>
-							<img src="img/login.png"/>登录
-						</button>
-					</div>
-				</form>
+			<div id="section4">				
+				<div class="input-div">
+					<span class="input-append"><img src="img/user.png"/></span>
+					<input placeholder="学工号" id="usernumber"/>
+				</div>
+				<div class="input-div">
+					<span class="input-append"><img src="img/pwd.png"/></span>
+					<input  placeholder="密码" id="password" type="password"/>
+				</div>
+				<div class="button-div">
+					<button id="btn-login">
+						<img src="img/login.png"/>登录
+					</button>
+				</div>
 			</div>
 		</div>
 		</div>
+		
+		<script type="text/javascript" src = "./js/landing_android.js"></script>		
 	</body>
 </html>

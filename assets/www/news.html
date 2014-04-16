@@ -1,0 +1,40 @@
+<html>
+<head>
+	<!-- script type="text/javascript" src="./js/cordova.js"></script-->
+	<script type="text/javascript" src="./js/constants.js"></script>
+	<script type="text/javascript" src="./js/jquery.js"></script>
+</head>
+<body>
+	<button id='btn-getnews'>Get News</button>
+	<button id='btn-course'>Go Course</button>
+	<h1>Loading...</h1>
+	<br/>
+	<h2>suc : </h2><h2 id="suc"></h2>
+	<br/>
+	<h2>len : </h2><h2 id="len"></h2>
+	<br/>
+	<h2 id="info"></h2>
+	<br/>
+	<script>
+		$(document).ready(function() {			
+			$("#btn-course").click(function () {
+				location.href="course.html";
+			});
+			$("#btn-getnews").click(function () {
+				$.post(APP_PATH + 'Home/getNews',
+					{},
+					function (data) {
+						$('#suc').text(data.success);
+						if (data.success == 1) {
+							var len = data.news.length;
+							$('#len').text(len);
+							for (var i = 0; i < len; i++) {
+								$('#info').text($('#info').text() + '<br />' + data.news[i].n_content);
+							}
+						}
+				}, 'json');
+			});
+		})
+	</script>
+</body>
+</html>
