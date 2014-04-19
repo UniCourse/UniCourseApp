@@ -7,11 +7,17 @@
 <body>
 	<button id='btn-delete'>Delete</button>
 	<button id='btn-go'>Go Home</button>
+	<button id='btn-feed'>feed_android</button>
+	<br />
+	<input type="text" id="txt"></input>
+	<button id='btn-txt'>Go</button>
 	<h1>Loading...</h1>
 	<br/>
-	<h2>usernumber : </h2><h2 id="un"></h2>
+	<p>usernumber : </p><p id="un"></p>
 	<br/>
-	<h2>password   : </h2><h2 id="pw"></h2>
+	<p>password   : </h2><h2 id="pw"></p>
+	<a href="http://202.112.113.119/testmobile/Uploads/Course/11111111/11/1111111111/IMG_0451.JPG">Download</a>
+	<a href="http://202.112.113.119/testmobile/Uploads/Course/11111111/70/2011202485/05_2014_2_14_14_51_1.pdf">Download</a>
 	<script>
 		// 本页面实现了读取本地用户名密码参数  存在的话自动登陆  否则转到登陆页面
 		var usernumber = window.localStorage.getItem("usernumber");
@@ -26,7 +32,8 @@
 					{'usernumber':usernumber, 'password':password},
 					function (data) {
 						if (data.success == 1) {
-							$('#un').text("success");
+							$('#un').text("success  " + data.session); // + $.cookie("PHPSESSID")
+							window.localStorage.setItem('session', data.session);
 						}
 				}, 'json');
 		}
@@ -40,6 +47,12 @@
 			});
 			$("#btn-go").click(function () {
 				location.href="news.html";
+			});
+			$("#btn-feed").click(function () {
+				location.href="feed_android.html";
+			});
+			$("#btn-txt").click(function () {
+				location.href=$("#txt").val() + ".html";
 			});
 		});
 	</script>

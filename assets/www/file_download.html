@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="./js/cordova.js"></script>
+	<script type="text/javascript" src="./js/jquery.js"></script>
+	<!--script type="text/javascript" src="./js/jquery.cookie.js"></script-->
+	<script type="text/javascript" src="./js/constants.js"></script>
+</head>
+<body>
+	<p id="filename"></p>
+	<br />
+	<p>保存到：</p>
+	<input id="save_path"></input>
+	<button id="download">Download</button>
+	<!--button id="showcookie">Show</button-->
+	<script>
+		var contentid = window.localStorage.getItem('download_contentid');
+		var filename = window.localStorage.getItem('download_filename');
+		$("#filename").text(filename);
+		var data = {"contentid":contentid};
+
+		$(document).ready(function () {
+			$("#download").click(function () {
+				//console.log("before " + data);
+				//$.post(APP_PATH + 'Common/downloadByContentid', data, downloadCallback, 'json');
+				//console.log("after " );
+				var fileTransfer = new FileTransfer(); 
+				//fileTransfer.download("http://unicourse.ruc.edu.cn/index/common/documentDownload.html?fname=1.cpp&fno=428", 
+				//	"/mnt/sdcard/1.cpp", downloadHandler, fileTransferErrorHandler);
+				var ps = window.localStorage.getItem('session');
+				var sessionid = "PHPSESSID=" + ps;//$.cookie("PHPSESSID");
+				var headers = {"Cookie": sessionid};
+				var options = {"headers": headers};
+				fileTransfer.download("http://202.112.113.119/testmobile/Mobile/Common/downloadByContentid.html?contentid=428", 
+					"/mnt/sdcard/1.cpp", downloadHandler, fileTransferErrorHandler, false, options);
+			});
+			$("#showcookie").click(function () {
+				$("#phpcookie").text($.cookie("PHPSESSID"));
+			});
+		});
+
+		function downloadHandler(fileEntry) {
+			console.log(fileEntry.fullPath);
+		}
+
+		function fileTransferErrorHandler(fileTransferError) {
+			console.log("err " + fileTransferError.code);
+		}
+
+		function downloadCallback(data) {
+			console.log("hi " + data);
+		}
+	</script>
+</body>
+</html>
