@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
 <head>
+	<meta charset="utf-8"/>
 	<script type="text/javascript" src="./js/cordova.js"></script>
 	<script type="text/javascript" src="./js/jquery.js"></script>
-	<!--script type="text/javascript" src="./js/jquery.cookie.js"></script-->
 	<script type="text/javascript" src="./js/constants.js"></script>
 </head>
 <body>
@@ -12,43 +12,36 @@
 	<p>保存到：</p>
 	<input id="save_path"></input>
 	<button id="download">Download</button>
-	<!--button id="showcookie">Show</button-->
+	<br />
+	<p id="flag"></p>
 	<script>
-		var contentid = window.localStorage.getItem('download_contentid');
 		var filename = window.localStorage.getItem('download_filename');
 		$("#filename").text(filename);
-		var data = {"contentid":contentid};
+		$("#save_path").val("/mnt/sdcard/unicourse/" + filename);
 
 		$(document).ready(function () {
 			$("#download").click(function () {
-				//console.log("before " + data);
-				//$.post(APP_PATH + 'Common/downloadByContentid', data, downloadCallback, 'json');
-				//console.log("after " );
-				var fileTransfer = new FileTransfer(); 
-				//fileTransfer.download("http://unicourse.ruc.edu.cn/index/common/documentDownload.html?fname=1.cpp&fno=428", 
-				//	"/mnt/sdcard/1.cpp", downloadHandler, fileTransferErrorHandler);
-				var ps = window.localStorage.getItem('session');
-				var sessionid = "PHPSESSID=" + ps;//$.cookie("PHPSESSID");
+				var phpsession = window.localStorage.getItem('session');
+				var sessionid = "PHPSESSID=" + phpsession;
 				var headers = {"Cookie": sessionid};
 				var options = {"headers": headers};
-				fileTransfer.download("http://202.112.113.119/testmobile/Mobile/Common/downloadByContentid.html?contentid=428", 
-					"/mnt/sdcard/1.cpp", downloadHandler, fileTransferErrorHandler, false, options);
-			});
-			$("#showcookie").click(function () {
-				$("#phpcookie").text($.cookie("PHPSESSID"));
+
+				var contentid = window.sessionStorage.getItem('download_contentid');
+				var savepath = $("#save_path").val();
+				var fileTransfer = new FileTransfer(); 
+				fileTransfer.download(APP_PATH + "Common/downloadByContentid.html?contentid=" + contentid, 
+					savepath, downloadHandler, fileTransferErrorHandler, false, options);
 			});
 		});
 
 		function downloadHandler(fileEntry) {
 			console.log(fileEntry.fullPath);
+			$("#flag").text("下载成功：" + fileEntry.fullPath);
 		}
 
 		function fileTransferErrorHandler(fileTransferError) {
 			console.log("err " + fileTransferError.code);
-		}
-
-		function downloadCallback(data) {
-			console.log("hi " + data);
+			$("#flag").text("下载失败：" + fileTransferError.code);
 		}
 	</script>
 </body>

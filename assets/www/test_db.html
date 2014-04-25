@@ -1,0 +1,25 @@
+<html>
+<head>
+	<script src="./js/database.manager.js"></script>
+	<script src="./js/jquery.js"></script>
+</head>
+<body>
+	<p id="show"></p>
+	<script>
+		window.localStorage.setItem("usernumber", "2011202071");
+		//var usernumber = window.loaclStorage.getItem("usernumber");
+		//window.localStorage.setItem("2011202071", true);
+		//var tableCreated = window.localStorage.getItem(usernumber);
+		var tableCreated = window.localStorage.getItem("2011202071");
+		//if (typeof(tableCreated) == undefined) document.write("haha ");
+		//if ("2011202071" in window.localStorage)
+		document.write(window.localStorage.length);
+		//document.write(tableCreated);
+		var db = openDB(2011202071);
+		//createTable(db);
+		insertRecord(db, {note:"nihao", date: new Date(2014,1,1)});
+		insertRecord(db, {note:"nibuhao", date: new Date(2014,2,1)});
+		getRecords(db);
+	</script>
+</body>
+</html>
