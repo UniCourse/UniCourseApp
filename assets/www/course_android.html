@@ -1,0 +1,349 @@
+<!doctype html>
+<html ng-app="UniCourse">
+	<head>
+		<title>课程</title>
+		<meta charset='utf-8'/>
+		<style>
+		body{margin: 0;padding:0;}
+		/*头*/
+		#header{position:fixed;top:0px;width:100%;height:70px;line-height:70px;background-color: rgb(79,193,233);text-align: center;z-index: 8;color:#FFF;font-size: 24px}
+		#header button{position:absolute;right:0px;width:46px;height:30px;padding:4px;margin:20px;border-radius:3px;background-color: rgb(59,175,218);box-shadow: none;outline: none;border:none;}
+		#header button:first-child{left:0px;}
+		#header button >img{width:100%;height:100%;display: block}
+		#header_menu{position: absolute;right:20px;top:70px;background-color: #3e3e3e;border-radius: 3px;font-size: medium}
+		#header_menu:before{content:"";display:block;position:absolute;top:-9px;right:15px;height:0px;width:0px;border-style:solid;border-width:5px;border-color:transparent transparent #3e3e3e;z-index: 3}
+		#header_menu .menu_item{height:40px;line-height: 40px;padding:0px 10px;}
+
+		#header_menu .menu_item img{float:left;height:20px;margin:10px 5px;}
+		/*主界面*/
+		#main{color:#5e5e5e;margin-top:70px;margin-bottom: 80px}
+		.main_list{background-color: rgb(232,232,232);width:100%;height:100%;}
+		.main_list .list_item{position:relative;background-color: #FFF;margin:0px 0px 3px;padding:10px 5%;}
+		.main_list .list_item.new:before{content:"";display: inline-block;position:absolute;left:0;top:0;height:100%;width:5px;background-color: rgb(59,175,218)}
+		.main_list .list_item a{text-decoration: none;color:rgb(79,193,233);}
+		.main_list .list_item .time{color:#c3c3c3;font-size: small;display: inline-block;}
+		.main_list .list_item .delete{display: inline-block;float: right;font-weight: bold;color:#ccc;}
+		/*公告页*/
+		#main_announce .list_item .from{float:right;color:rgb(79,193,233);}
+		/*介绍页*/
+		#main_info .infotable{width:100%;padding:5%;}
+		#main_info .infotable tr{height:50px;line-height: 50px;}
+		#main_info .infotable tr td:first-child{width:30%;min-width: 6em}
+		/*作业页*/
+		#main_assign .deadline{color:rgb(79,193,233);padding:5px 0px;font-size: small}
+		#main_assign .deadline.warning{color:rgb(255,160,160);}
+		#main_assign .deadline.warning .dltext{background-color: rgb(255,196,196)}
+		#main_assign .deadline .dltext{background-color: rgb(196,240,255);margin-right: 5px;padding:2px 3px;}
+		#main_assign .astitle{margin:5px 0px;}
+		#main_assign .asfile{margin:10px 0px;font-size: small}
+		.downloadicon{display: inline-block;background-color: #CCC;width:20px;height:13px;padding:5px;border-radius: 3px;margin-right:5px;}	
+		#main_assign .downloadicon{float:left;}		
+		.download.active .downloadicon{background-color: rgb(79,193,233);}
+		.downloadicon img{width:100%;height:100%;display:block;}
+		/*课件页*/
+		#main_res .list_item{line-height: 2em}
+		#main_res .filetype{position: relative;float:left;margin-right:5px;display:inline-block;color:#FFF;font-size: smaller;height:2em;}
+		#main_res .filetype >img{display: block;height:2em;}
+		#main_res .downloadicon{float:right;}	
+		/*主菜单*/
+		#main_menu{position:fixed;bottom:0;width:100%;height:80px;background-color: rgb(79,193,233);z-index: 8}
+		#main_menu .menu_item{width:19%;text-align: center;display: inline-block;height:100%;color:#FFF;float:left;border:2px solid rgb(59,175,218);border-bottom: 0px;border-top: 0px}
+		#main_menu .menu_item a{display: block;width:100%;height:100%;text-decoration: none;color:#FFF;}
+		#main_menu .menu_item a:active{background-color: rgb(59,175,218)}
+		#main_menu .menu_item:last-child{border-right: none}
+		#main_menu .menu_item img{width:30px;margin-top: 15px}
+		#main_menu .menu_item span{display: block;width:100%;margin-top: 3px}
+		#main_menu .menu_item.cur{background-color: rgb(59,175,218)}
+		/*课程侧菜单*/
+		#side_menu{position:fixed;width:300px;height:100%;background-color: rgba(0,0,0,0.8);top:0;left:0;z-index: 9}
+		#side_menu .side_list .list_item{height:50px;line-height:50px;color:#FFF;}
+		#side_menu .side_list .list_item:after{content:'';display:block;height:1px;background-color:#303030;box-shadow: 1px 1px 1px #5e5e5e}
+		#side_menu .menu_icon{height:20px;float:left;margin:15px 20px 15px 30px}
+		#side_menu .side_list .list_title{height:70px;line-height:70px;font-size:24px;color:#FFF;text-align: center;overflow: hidden;text-overflow:ellipsis;}
+		</style>
+		<script src="./js/jquery.js"></script>
+		<script src="./js/angular.min.js"></script>
+
+	</head>
+	<body ng-controller="topCtrl">
+		<!--Header Start-->
+		<div id="header" ng-controller="headerCtrl">
+			<button ng-click="showSideMenu();"><img src="img/btn-menu.png"/></button>
+			<span>课程信息</span>
+			<button ng-click="isShowMenu=!isShowMenu"><img src="img/btn-plus.png"/></button>
+			<div id="header_menu" ng-show="isShowMenu">
+				<div class="menu_item"><img src="img/bubble.png"/>发起讨论</div>
+			</div>
+		</div>
+		<!--Header End-->
+		<!--Main Start-->
+		<div id="main" ng-controller="mainCtrl" ng-click="hideMenu();">
+			<!--Sub Start-->
+			<!--Announce-->
+			<script type="text/ng-template" id="t_main_announce">
+			<div id="main_announce" class="main_list" ng-controller="announceCtrl">
+				<div class="list_item" ng-repeat="announce in announces">
+					<div class="content" ng-bind="announce.ncontent">						
+					</div>
+					<div>
+						<span class="time" ng-bind="announce.ntime"></span>	
+						<span class="from" ng-bind="announce.nfrom"></span>
+					</div>	
+				</div>			
+			</div>
+			</script>
+			<!--Info-->
+			<script type="text/ng-template" id="t_main_info">
+			<div id="main_info" ng-controller="infoCtrl">
+				<table class="infotable">
+					<thead>
+						<tr><td>任课教师</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>姓名</td><td ng-bind="info.tname"></td></tr>
+						<tr><td>邮箱</td><td ng-bind="info.temail"></td></tr>
+						<tr><td>电话</td><td ng-bind="info.tphone"></td></tr>
+					</tbody>
+				</table>
+				<table class="infotable">
+					<thead>
+						<tr><td>课程信息</td></tr>
+					</thead>
+					<tbody>
+						<tr><td>考核方式</td><td ng-bind="info.checkway"></td></tr>
+						<tr><td>课程介绍</td><td ng-bind="info.intro"></td></tr>
+						<tr><td>备注</td><td ng-bind="info.cnotes"></td></tr>
+					</tbody>
+
+				</table>
+			</div>
+			</script>
+			<!--Assign-->
+			<script type="text/ng-template" id="t_main_assign">
+			<div id="main_assign" ng-controller="assignCtrl">
+				<div class="main_list">
+					<div ng-repeat="assign in assigns" ng-assign class="list_item">
+						<div class="deadline" ng-class="{true: 'warning', false: ''}[assign.warning]">
+							<span class="dltext">截止日期</span><span ng-bind="assign.deadline" class="dltime"></span>
+						</div>
+						<div class="astitle">
+							<span ng-bind="assign.htitle"></span>
+						</div>
+						<div class="asfile" ng-show="assign.furl">
+							<a href="{{assign.furl}}" class="download"  ng-class="{true: 'active', false: ''}[assign.fileActive]" ng-click="downloadfile();">
+								<span class="downloadicon"><img src="img/download.png"/></span>
+								<span ng-bind="assign.fname"></span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			</script>
+			<!--resources-->
+			<script type="text/ng-template" id="t_main_res">
+			<div id="main_res" ng-controller="resCtrl">
+				<div class="main_list">
+					<div class="list_item" ng-repeat="res in resources">
+						<span class="filetype">							
+							<img src="img/file-gray.png"/>
+						</span>
+						<span ng-bind="res.fname"></span>
+						<a href="{{assign.furl}}" class="download" ng-click="downloadfile();">
+							<span class="downloadicon"><img src="img/download.png"/></span>
+						</a>
+					</div>
+				</div>				
+			</div>
+			</script>
+			<!--Sub End-->
+		</div>
+		<!--Main End-->
+		<!--SideMenu Start-->
+		<div id="side_menu" ng-controller="sideMenuCtrl" ng-show="isShow">
+			<div class="side_list">
+				<div class="list_title">编译原理</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='announce'"><img src="img/l_menu_announce.png" class="menu_icon"/>公告</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='assign'"><img src="img/l_menu_assign.png" class="menu_icon"/>作业</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='forum'"><img src="img/l_menu_forum.png" class="menu_icon"/>讨论</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='group'"><img src="img/l_menu_group.png" class="menu_icon"/>小组</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='res'"><img src="img/l_menu_res.png" class="menu_icon"/>资源</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='info'"><img src="img/l_menu_info.png" class="menu_icon"/>课程信息</div>
+				<div class="list_item" ng-sidemenuitem ng-init="target='switch'"><img src="img/l_menu_conf.png" class="menu_icon"/>切换课程</div>
+			</div>
+		</div>
+		<!--SideMenu End-->
+		<!--MainMenu Start-->
+		<div id="main_menu">
+			<div class="menu_item">
+				<a href="">
+					<img src="img/a_menu_home.png" />
+					<span>首页</span>
+				</a>
+			</div>
+			<div class="menu_item">
+				<a href="">
+					<img src="img/a_menu_cal.png" />
+					<span>日程</span>
+				</a>
+			</div>
+			<div class="menu_item cur">
+				<a href="">
+					<img src="img/a_menu_course.png" />
+					<span>课程</span>
+				</a>
+			</div>
+			<div class="menu_item">
+				<a href="">
+					<img src="img/a_menu_msg.png" />
+					<span>消息</span>
+				</a>
+			</div>
+			<div class="menu_item">
+				<a href="">
+					<img src="img/a_menu_user.png" />
+					<span>我</span>
+				</a>
+			</div>
+		</div>
+		<!--MainMenu End-->
+	</body>
+	<script>
+	var app=angular.module('UniCourse',[]);
+
+	//处理angular的json格式
+	app.config(function($locationProvider,$httpProvider) {
+	    $locationProvider.html5Mode(false);
+	    $httpProvider.defaults.useXDomain = true;
+	    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+	    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+	});
+
+	//左侧菜单
+	app.controller('sideMenuCtrl',function($scope){
+		$scope.isShow=false;
+		$scope.$on('showSide',function(){
+			$scope.isShow=true;
+		});
+		$scope.$on('hideMenu',function(){
+			$scope.isShow=false;
+		});
+	});
+
+	//Header,主要控制菜单
+	app.controller('headerCtrl',function($scope,$rootScope){
+		var init=function(){
+			$scope.isShowMenu=false;
+		}
+		$scope.showSideMenu=function(){
+			$rootScope.$broadcast('showSide');
+		}
+		$scope.$on('hideMenu',function(){
+			$scope.isShowMenu=false;
+		});
+		init();
+	});
+
+	//主界面
+	app.controller('mainCtrl',function($scope,$rootScope){
+		$scope.hideMenu=function(){
+			$rootScope.$broadcast('hideMenu');
+		}
+	});
+
+	//公告页面
+	app.controller('announceCtrl',function($scope,$http){
+		var init=function(){
+			$http.get('announce.json').success(function(data){
+				$scope.announces=data;
+			});
+		}
+		init();	
+	});
+	
+	//课程信息页面
+	app.controller('infoCtrl',function($scope,$http){
+		var init=function(){
+			$http.get('info.json').success(function(data){
+				$scope.info=data;
+			});
+		}
+		init();
+	});
+
+	//作业页面控制器
+	app.controller("assignCtrl",function($scope,$http){
+		var init=function(){
+			$http.get("assign.json").success(function(data){
+				$scope.assigns=data;
+			});
+		}
+		init();
+	});
+
+	//课件页面控制器
+	app.controller('resCtrl',function($scope,$http){
+		var init=function(){
+			$http.get("res.json").success(function(data){
+				$scope.resources=data;
+				for(var i in $scope.resources){
+					var res=$scope.resources[i];
+					res.ftype=res.fname.split('.').pop();
+				}
+			});
+		}
+		init();
+	});
+
+	//控制不面板的切换，需要与sideMenu配合，将template编译生成dom结点后放到文档中
+	app.controller('topCtrl',function($scope,$http,$compile){
+		var hideSide=function(){
+			angular.element('#side_menu').scope().isShow=false;
+			angular.element("#side_menu").scope().$apply();
+		}
+		var switchTab=function(event,target){
+			var tabHtml=angular.element("#t_main_"+target);
+			if(tabHtml.length==1){//如果模板存在（目前还缺几个模板）
+				if($scope.curTab) $scope.curTab.remove();
+				var curTab=$compile(tabHtml.html())($scope);
+				curTab.appendTo("#main");
+				$scope.curTab=curTab;
+				hideSide();
+			}		
+		}
+		$scope.$on('switchTab',switchTab);
+		//默认先打开公告
+		switchTab({},'announce');
+	});
+
+	//每个左侧菜单
+	app.directive('ngSidemenuitem',function(){
+		return{
+			scope:true,
+			link:function(scope,element,attr){
+				element.on('click',function(){
+					var back=element.css('background-color');
+					element.css({'background-color':'rgba(155,155,155,0.8)'});
+					//每次点击触发跳到对应面板的事件。注：target template的id 和dom的id 三者名字必须一致
+					scope.$emit('switchTab',scope.target);
+					element.css({'background-color':back});
+				});
+			}
+		}
+	});
+
+	//每条作业
+	app.directive('ngAssign',function(){
+		return function(scope,element,attr){
+			scope.downloadfile=function(){
+				/*
+				*如果下载文件的逻辑要单独写的话，写在这
+				*把a的href去掉
+				*取数据用scope.assign
+				*/
+				$http.post('unicourse.ruc.edu.cn/index/common/documentDownload.html',scope.assign).success(function(data){});
+				return false;
+			}
+		}
+	});
+	</script>
+</html>

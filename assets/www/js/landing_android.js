@@ -1,6 +1,7 @@
 // 登陆按钮
 $(document).ready(function() {			
 	$("#btn-login").click(function () {
+		console.log("login clicked");
 		var usernumber = $('#usernumber');
 		var password = $('#password');
 		var data = {usernumber:usernumber.val(), password:password.val()};
@@ -10,6 +11,7 @@ $(document).ready(function() {
 
 // 登陆成功的回调函数
 function loginCallback(data) {
+	console.log("login succeed!");
 	$("#section3").text(data.success);
 	// 本地存储
 	if (data.success) {
