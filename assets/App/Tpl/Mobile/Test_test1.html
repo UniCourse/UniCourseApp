@@ -1,0 +1,29 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+</head>
+<body>
+	<h1>Loading...</h1>
+	<br/>
+	<h2>usernumber : </h2><h2 id="un"></h2>
+	<br/>
+	<h2>password   : </h2><h2 id="pw"></h2>
+	<br/>
+	<button id="btn1">Click</button>
+	<script>
+	$(function () {
+		$("#btn1").click( function () {
+			var usernumber = window.localStorage.getItem("usernumber");
+			var password = window.localStorage.getItem("password");
+			$.post('http://202.112.113.119/testmobile/index.php/Mobile/Login/login',
+					{'usernumber':usernumber, 'password':password},
+					function (data) {
+						$("#un").text(data.success);
+						$("#pw").text(data.info.sno);
+				}, 'json');
+		});
+	});
+	</script>
+</body>
+</html>

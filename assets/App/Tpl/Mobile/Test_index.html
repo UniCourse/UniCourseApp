@@ -1,0 +1,60 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+	<!--script type="text/javascript" src="__PUBLIC__/js/cookies.js"></script-->
+</head>
+<body>
+	hello phone gap
+	
+	<form>
+		<input type="text" id="usernumber" name="usernumber" value="2011202071"/>
+		<input type="password" id="password" name="password" value="5123190"/>
+		<div id="btn1">submit 1</div>
+		<div id="btn2">submit 2</div>
+	</form>
+	
+	<script type="text/javascript">
+	$(function () {
+		$("#btn1").click( function () {
+			var usernumber = $('input[id=usernumber]' );
+			var password = $('input[id=password]');
+			$.ajax({
+				url:'http://202.112.113.119/testmobile/index.php/Mobile/Login/login',
+				type:'post',
+				data:{usernumber:usernumber.val(),password:password.val()},
+				success:function(data){
+					alert(data);
+					//console.log(data.usernumber + "  " + data.password);
+				},
+				error:function(w,t,f){
+					alert("failed");
+					//console.log(w+' '+t+' '+f);
+					//console.log("failed");
+				}
+			});
+		});
+
+		$("#btn2").click(function () {
+			var usernumber = $('#usernumber');
+			var password = $('#password');
+			$.post('http://202.112.113.119/testmobile/index.php/Mobile/Login/login',
+				{usernumber:usernumber.val(), password:password.val()},
+				function (data) {
+					alert(data.status);
+			}, 'json');
+		});
+	});
+	</script>
+
+	<br />
+	<br />
+	<br />
+	<div id="showcookies"></div>
+
+	<script type="text/javascript">
+		document.getElementById('showcookies').innerHTML=document.cookie;
+	</script>
+
+</body>
+</html>

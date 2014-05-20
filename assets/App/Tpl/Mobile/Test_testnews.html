@@ -1,0 +1,41 @@
+<html>
+<head>
+	<meta charset="utf-8" />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/jquery.cookie.js"></script>
+</head>
+<body>
+	<button id='btn-getnews'>Get News</button>
+	<button id='btn-getsession'>Show Session</button>
+	<p>Loading...</p>
+	<p>suc : </p><p id="suc"></p>
+	<p>len : </p><p id="len"></p>
+	<p id="info"></p>
+	<br />
+	<p id="phpsession"></p>
+	<br />
+	<p id="cookies"></p>
+	<script>
+		$(document).ready(function() {			
+			$("#btn-getnews").click(function () {
+				$.post('http://202.112.113.119/testmobile/index.php/Mobile/Home/getNews',
+					{},
+					function (data) {
+						$('#suc').text(data.success);
+						if (data.success == 1) {
+							var len = data.news.length;
+							$('#len').text(len);
+							for (var i = 0; i < len; i++) {
+								$('#info').text($('#info').text() + '<br />' + data.news[i].n_content);
+							}
+						}	
+				}, 'json');
+			});
+			$("#btn-getsession").click(function () {
+				$("#cookies").text($.cookie());
+				$("#phpsession").text($.cookie("PHPSESSID"));
+			});
+		});
+	</script>
+</body>
+</html>
